@@ -16,7 +16,7 @@ stanza.download("en", processors="tokenize,pos,constituency", verbose=False)
 nlp_stanza = stanza.Pipeline(
     lang="en",
     processors="tokenize,pos,constituency",
-    verbose=True
+    verbose=False
 )
 
 # -------------------------
