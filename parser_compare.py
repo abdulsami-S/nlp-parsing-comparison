@@ -2,6 +2,7 @@ import spacy
 import stanza
 import time
 import os
+import random
 
 # -------------------------
 # LOAD MODELS
@@ -23,21 +24,16 @@ nlp_stanza = stanza.Pipeline(
 # -------------------------
 
 def read_conllu_sentences(file_path, limit=5):
-    sentences = []
-    current_sentence = []
+    all_sentences = []
 
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
-            line = line.strip()
-
             if line.startswith("# text ="):
                 sentence = line.replace("# text =", "").strip()
-                sentences.append(sentence)
+                all_sentences.append(sentence)
 
-                if len(sentences) >= limit:
-                    break
-
-    return sentences
+    # Select random sentences
+    return random.sample(all_sentences, limit)
 
 
 # -------------------------
