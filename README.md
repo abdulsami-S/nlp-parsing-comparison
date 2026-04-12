@@ -13,23 +13,34 @@ By natively pulling sample data from real-world `CoNLL-U` linguistic datasets an
 
 ---
 
-## 📖 A-to-Z How It Works (Code Breakdown for New Users)
+## 📖How It Works (Architecture Flowchart)
 
-The `parser_compare.py` script is designed to be fully modular and process data through 4 primary phases:
-
-1. **Configuration & `TAG_MAP` Definition**:
-   At the top of the file, we import the standard libraries (`spacy`, `stanza`, `matplotlib`). We define a global `TAG_MAP` dictionary. Many parsers output complex syntactic acronyms like `SBAR` (Subordinate Clause) or `VBG` (Verb Gerund). The `TAG_MAP` automatically intercepts and translates these into plain English, ensuring final output is human-readable.
-
-2. **Dataset Ingestion (`read_conllu_sentences`)**:
-   Standard NLP benchmark datasets come in CoNLL-U formatting (which contains a lot of metadata). The script safely opens `UD_English-EWT/en_ewt-ud-test.conllu`, ignores the complex metadata, extracts only the raw `# text = ` lines, and randomly samples exactly 5 sentences. **Why random?** This ensures we benchmark system processing speeds unbiasedly on fresh data each run.
-
-3. **Core Benchmarking Engine (`compare_parsers`)**:
-   This loop forms the heart of the project. A sampled sentence is passed individually to:
-   * **spaCy (Dependency)**: The script marks a start timestamp, processes the sentence into direct word-to-word relationships (shallow but fast), marks an end timestamp, and prints the result.
-   * **Stanza (Constituency)**: Repeating the exact same process, the sentence is fed into Stanza to construct a deep structural recursion tree. The custom `print_flattened_constituency` algorithm kicks in to untangle and normalize Stanza's nested matrix, aligning its visual aesthetic to match spaCy.
-
-4. **Visual Metrics Aggregation (`plot_performance_comparison`)**:
-   Once computational bounds for all 5 sentences are captured, the engine launches `Matplotlib`. It mathematically aggregates execution speeds array-by-array and deploys a clean 3x2 graphing matrix mapping the precise fraction-of-a-second cost differential.
+```mermaid
+flowchart TD
+    %% Phase 1
+    P1[⚙️ 1. Configuration] -->|Load TAG_MAP & Models| P2[📄 2. Dataset Ingestion]
+    
+    %% Phase 2 
+    P2 -->|Extract 5 Random Sentences| P3{🚀 3. Benchmarking Engine}
+    
+    %% Phase 3
+    P3 -->|Shallow & Fast| S1(spaCy: Dependency Parsing)
+    P3 -->|Deep & Nested| S2(Stanza: Constituency Parsing)
+    
+    S1 -.->|Calculate Speed| M1[Normalize & Print Output]
+    S2 -.->|Calculate Speed| M1
+    
+    %% Phase 4
+    M1 --> P4[📊 4. Visual Metrics]
+    P4 -->|Matplotlib UI| Output[Render 3x2 Performance Graph]
+    
+    style P1 fill:#1f77b4,stroke:#fff,stroke-width:2px,color:#fff
+    style P2 fill:#1f77b4,stroke:#fff,stroke-width:2px,color:#fff
+    style P3 fill:#1f77b4,stroke:#fff,stroke-width:2px,color:#fff
+    style P4 fill:#1f77b4,stroke:#fff,stroke-width:2px,color:#fff
+    style S1 fill:#09A3D5,stroke:#fff,stroke-width:2px,color:#fff
+    style S2 fill:#B1040E,stroke:#fff,stroke-width:2px,color:#fff
+```
 
 ---
 
