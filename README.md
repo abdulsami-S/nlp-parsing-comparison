@@ -82,7 +82,7 @@ NLP-Parsing-Comparison/
 
 ---
 
-## 🚀 Installation & Execution Guide (A-Z)
+## 🚀 Installation & Execution Guide 
 
 Follow these steps to fully configure and run the engine from scratch.
 
